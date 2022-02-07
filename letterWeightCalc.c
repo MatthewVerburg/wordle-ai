@@ -23,9 +23,9 @@ int main(int argc, char * argv[]){
     int guessWeight = 0;
     int i;
     int j;
-    input = fopen("sgb-words.txt", "r");
+    input = fopen("words.txt", "r");
     if(input == NULL){
-        printf("sgb-words.txt not found");
+        printf("words.txt not found");
         return(-1);
     }
     output = fopen("weights.txt", "w");
