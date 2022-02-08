@@ -18,15 +18,16 @@
 */
 wordNode * createNode(char word[6]){
     wordNode * node = malloc(sizeof(wordNode));
-    memccpy(node->word, word, 6, sizeof(char));
+    memcpy(node->word, word, sizeof(char)*6);
     node->next = NULL;
     node->prev = NULL;
 
     unsigned int containedLetters = 0;
     int i;
     for(i = 0; i<5;i++){
-        containedLetters += 1<<(word[i]-97);
+        containedLetters = containedLetters | 1<<(word[i]-97);
     }
+    node->containedL = containedLetters;
     return node;
 }
 
@@ -36,7 +37,7 @@ wordNode * createNode(char word[6]){
 * wordNode * head [IN] head of the linked list
 * char * word [IN] the word to be added to the linked list
 */
-void * addWord(wordNode * head,char word[6]){
+void addWord(wordNode * head,char word[6]){
     wordNode * newNode = createNode(word);
     wordNode * nextNode = head;
     
@@ -53,12 +54,12 @@ void * addWord(wordNode * head,char word[6]){
 * wordNode ** head [IN/OUT] pointer to the head of the list, updated if
                             rmWord is the head of the list
 */
-void * removeWord(wordNode * rmWord, wordNode ** head){
+void removeWord(wordNode * rmWord, wordNode ** head){
     if(rmWord->next !=NULL){
         rmWord->next->prev = rmWord->prev;
     }
     if(rmWord->prev !=NULL){
-        rmWord->prev->next = rmWord->prev;
+        rmWord->prev->next = rmWord->next;
     }else {
         *head = rmWord->next;
     }

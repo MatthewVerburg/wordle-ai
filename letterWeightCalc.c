@@ -11,10 +11,19 @@
 
 
 wordNode * getBestGuess(wordNode * head){
+    
     int weights[26];
     int posWeights[26][5];
-    calcWeight(head,weights[26], posWeights[26][5]);
-
+    int i, j;
+    
+    //init weights to 0
+    for(i = 0; i < 26; i++){
+        weights[i] = 0;
+        for(j = 0;j<5;j++){
+            posWeights[i][j] = 0;
+        }
+    }
+    calcWeight(head,weights, posWeights);
     return heaviestWord(head, weights, posWeights);
 
 }
@@ -26,19 +35,15 @@ wordNode * getBestGuess(wordNode * head){
 *  int * posWeights [OUT] the array containing the position based letter weights
 */
  void calcWeight(wordNode * head, int weights[26], int posWeights[26][5]){
-    char word[8]; //5 letters + \n\0
     int i;
     int j;
-    //init weights to 0
-    for(i = 0; i < 26; i++){
-        weights[i] = 0;
-        for(j = 0;j<5;j++){
-            posWeights[i][j] = 0;
-        }
-    }
+    int cntr = 0;
+    FILE * log = fopen("log.txt", "w");
 
     //calculates weights
     while(head != NULL){
+        cntr++;
+        fprintf(log,"%s\n", head->word);
         for(i = 0; i<5;i++){//for each letter in the word
             weights[head->word[i]-97]++;  // add 1 to the weight of that letter
             posWeights[head->word[i]-97][i]++;
@@ -51,6 +56,8 @@ wordNode * getBestGuess(wordNode * head){
         }
         head = head->next;
     }
+    printf("%d words left\n",cntr);
+    fclose(log);
 }
 
 /*
@@ -63,7 +70,6 @@ wordNode * getBestGuess(wordNode * head){
 *  wordNode * [OUT] pointer to the heaviest word
 */
 wordNode * heaviestWord(wordNode * head, int weights[26], int posWeights[26][5]){
-    char word[8]; //5 letters + \n\0
     int i;
     int j;
     int heaviestCombWeight = 0;
