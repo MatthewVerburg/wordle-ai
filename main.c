@@ -1,18 +1,15 @@
 #include <stdlib.h>
-#include <stdio.h>
-#include "list.h"
-
+#include <string.h>
+#include "weightCalc.h"
+#include "main.h"
 
 FILE * input;
 
 int main(int argc, char * argv[]){
-    int weights[26];
-    int posWeights[26][5];
-    char bestGuess[6];
-    int guessWeight = 0;
-    int i;
-    int j;
+
+    wordNode * bestGuess;
     wordNode * head;
+    char response[6];
 
     input = fopen("words.txt", "r");
     if(input == NULL){
@@ -21,13 +18,13 @@ int main(int argc, char * argv[]){
     }
 
     head = readWordList(input);
-
-    calcWeight(input, weights, posWeights);
-    guessWeight = heaviestWord(input, weights, posWeights, bestGuess);
-    
-
-
     fclose(input);
+
+
+    bestGuess = getBestGuess(head);
+    
+    getResponse(bestGuess,response);
+    
     return(0);
 }
 
@@ -45,4 +42,14 @@ wordNode * readWordList(FILE * input){
     }
 
     return head;
+}
+
+void getResponse(wordNode * guess, char resp[6]){
+    char input[7];
+    printf("Enter the colors for each letter below the guess word\ngreen: g , yellow: y , grey x\n");
+    printf("%s\n", guess->word);
+    fgets(input,7,stdin);
+    input[5] = '\0';
+    
+    memccpy(resp, input, 6, sizeof(char));
 }
